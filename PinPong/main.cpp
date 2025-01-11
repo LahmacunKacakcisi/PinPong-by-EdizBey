@@ -24,9 +24,12 @@ int main()
     int p1Score =0;
     int p2Score =0;
 
-    srand( (unsigned)time(NULL) );
-
     InitWindow(screenWidth, screenHeight, "PING PONG by EdizBey");
+
+    InitAudioDevice();
+
+    Sound winSound = LoadSound("resources/winSound.mp3");
+    Sound Bounce = LoadSound("resources/Bounce.wav");   
 
     SetTargetFPS(60); 
 
@@ -42,9 +45,13 @@ int main()
         BeginDrawing();
         ClearBackground(BLACK);
 
+        DrawText(TextFormat(" %i" ,p1Score) , 30 , 30 , 50 , GREEN);
+
+        DrawText(TextFormat(" %i" ,p2Score) , GetScreenWidth()-80 , 30 , 50 , GREEN);
+
         int fps = GetFPS();
 
-        top.Update(&p1Score , &p2Score);
+        top.Update(p1Score , p2Score ,winSound ,Bounce);
         top.Render();
 
         p1.Update();
@@ -68,21 +75,26 @@ int main()
         if( CheckCollisionCircleRec( Vector2 {top.x,top.y}, top.radius , Rectangle {p1.x,p1.y,p1.width,p1.height}))
         {
             top.velx *= -1;
+            PlaySound(Bounce);
         }
 
         if( CheckCollisionCircleRec( Vector2 {top.x,top.y}, top.radius , Rectangle {p2.x,p2.y,p2.width,p2.height}))
         {
             top.velx *= -1;
+            PlaySound(Bounce);
         }
 
         DrawLine( screenWidth/2 , 0 , screenWidth/2 , screenHeight , GREEN );
 
-        DrawText(TextFormat(" %i" ,p1Score) , 30 , 30 , 50 , GREEN);
 
-        DrawText(TextFormat(" %i" ,p2Score) , GetScreenWidth()-80 , 30 , 50 , GREEN);
 
         EndDrawing();
     }
+
+    UnloadSound(winSound);   
+    UnloadSound(Bounce);    
+
+    CloseAudioDevice(); 
 
 
     CloseWindow(); 

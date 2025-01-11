@@ -1,4 +1,4 @@
-
+#include <raylib.h>
 
 const int ballSpeed =3;
 
@@ -13,7 +13,7 @@ class Top
     float vely = ballSpeed;
     float velx = ballSpeed;
 
-    void Update( int *p1Score , int *p2Score);
+    void Update( int &p1Score , int &p2Score , Sound &winSound , Sound &Bounce);
     void Start();
     void Render();
 

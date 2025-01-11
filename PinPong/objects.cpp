@@ -3,26 +3,37 @@
 #include <bits/stdc++.h>
 
 
+
+
 //Top fonksiyonları
 
-void Top::Update(int *p1Score , int *p2Score)
+void Top::Update(int &p1Score , int &p2Score , Sound &winSound , Sound &Bounce)
 {
 
     x += velx;
     y += vely;
 
     if(y + radius >= GetScreenHeight() or y - radius <=0)
-    vely *= -1;
+    {
+
+        vely *= -1;
+
+        PlaySound(Bounce);
+
+    }
+
 
     if(x + radius >= GetScreenWidth())
     {
         y = GetScreenHeight()/2;
         x = GetScreenWidth()/2;
 
-        vely =  rand() % (ballSpeed+1) - ballSpeed;
-        velx = (rand() % 2 == 0) ? -ballSpeed : ballSpeed;
+        vely =  GetRandomValue(-ballSpeed, ballSpeed);
+        velx = GetRandomValue(0, 1) ? -ballSpeed : ballSpeed;
 
-        (*p1Score)++;
+        p1Score++;
+
+        PlaySound(winSound);
 
     }
 
@@ -35,7 +46,9 @@ void Top::Update(int *p1Score , int *p2Score)
         vely =  rand() % (ballSpeed+1) - ballSpeed;
         velx = (rand() % 2 == 0) ? -ballSpeed : ballSpeed;
 
-        (*p2Score)++;
+        p2Score++;
+
+        PlaySound(winSound);
 
     }
 
@@ -44,7 +57,8 @@ void Top::Update(int *p1Score , int *p2Score)
 
 void Top::Start()
 {
-
+    x = GetScreenWidth()/2;
+    y = GetScreenHeight()/2;
 }
 
 
